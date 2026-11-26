@@ -75,3 +75,7 @@ label span { display:block; color:var(--soft); font-size:.875em }
 .proof-map svg .keepout{fill:var(--ink);opacity:.65}
 .proof-map svg .registered{fill:var(--accent);stroke:var(--sheet);stroke-width:.8}
 .proof-map small{color:var(--soft)}
+
+.query-bar{display:flex;gap:.7rem;align-items:end;flex-wrap:wrap}
+.query-bar label{flex:1 1 16rem}
+.drill{display:grid;gap:1.25rem;margin-top:1.25rem}

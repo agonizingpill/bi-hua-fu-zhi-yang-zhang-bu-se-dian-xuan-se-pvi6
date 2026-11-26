@@ -8,10 +8,17 @@ def seed():
     sizes = {}
     with transaction() as conn:
         for table, rows in FIXTURES:
-            for row in rows:
-                present = conn.scalar(select(table.c.code).where(table.c.code == row['code']))
-                if present is None:
-                    conn.execute(table.insert().values(**row))
+            if 'code' in table.c:
+                for row in rows:
+                    present = conn.scalar(select(table.c.code).where(table.c.code == row['code']))
+                    if present is None:
+                        conn.execute(table.insert().values(**row))
+            else:
+                # 自增流水表：整表为空时才灌入，保持与 code 表相同的幂等语义。
+                existing = conn.scalar(select(func.count()).select_from(table))
+                if not existing:
+                    for row in rows:
+                        conn.execute(table.insert().values(**row))
             sizes[table.name] = conn.scalar(select(func.count()).select_from(table))
     return sizes
 
